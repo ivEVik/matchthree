@@ -6,7 +6,7 @@ MainWindow::MainWindow(Gamestate& gamestate, QWidget* parent) : QMainWindow(pare
 	setWindowIcon(QIcon(":/art/icon.png"));
 }
 
-MainWindow::~MainWindow()
+/*MainWindow::~MainWindow()
 {
-}
+}*/
 

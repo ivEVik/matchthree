@@ -22,12 +22,6 @@ INCLUDEPATH += src/
 
 RESOURCES += resources/resources.qrc
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
-
-
 # USER CONFIG
 CONFIG(debug, debug|release) {
 	BUILDMODE = debug
@@ -41,7 +35,12 @@ RCC_DIR = ./$${BUILDMODE}-tmp/rcc/
 UI_DIR = ./$${BUILDMODE}-tmp/ui/
 
 # Deployment
-QMAKE_POST_LINK = windeployqt --no-patchqt --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-compiler-runtime --no-webkit2 --no-angle --no-opengl-sw ./${DESTDIR}/
+CONFIG(nowindeploy) {
+} else {
+	QMAKE_POST_LINK = windeployqt --no-patchqt --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-compiler-runtime --no-webkit2 --no-angle --no-opengl-sw $${BUILDMODE}
+}
 
-RESOURCES += \
-    resources/resources.qrc
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target

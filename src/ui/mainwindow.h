@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
 
 public:
 	MainWindow(Gamestate& gamestate, QWidget *parent = nullptr);
-	~MainWindow();
+	//~MainWindow();
 
 private:
 	Gamestate& gamestate;
