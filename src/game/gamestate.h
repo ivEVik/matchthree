@@ -37,6 +37,9 @@ private:
 	std::mt19937 rng;
 
 	std::array<std::array<Piece, BOARD_HEIGHT>, BOARD_WIDTH> board;
+
+	static_assert(MINIMUM_PIECES_FOR_MATCH > 1, "More than one piece should be needed to form a match.");
+	static_assert(MINIMUM_PIECES_FOR_MATCH <= BOARD_HEIGHT && MINIMUM_PIECES_FOR_MATCH <= BOARD_WIDTH, "The board is too small to allow matches.");
 };
 
 
