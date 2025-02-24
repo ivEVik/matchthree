@@ -36,6 +36,7 @@ public:
 	bool process();
 
 	int getScore() const;
+	const Piece* getPiece(const size_t x, const size_t y) const;
 
 	static BoardDirection oppositeDir(const BoardDirection direction);
 
