@@ -5,6 +5,7 @@
 #include <game/piece.h>
 
 #include <array>
+#include <QObject>
 #include <random>
 
 
@@ -18,8 +19,10 @@ enum class BoardDirection : int
 };
 
 
-class Gamestate final
+class Gamestate final : public QObject
 {
+	Q_OBJECT
+
 public:
 	static constexpr int BOARD_WIDTH = 4;
 	static constexpr int BOARD_HEIGHT = 5;
