@@ -2,5 +2,16 @@
     <qresource prefix="/">
         <file>art/background.webp</file>
         <file>art/background-header.webp</file>
+        <file>art/pieces/piece-avocado-double.webp</file>
+        <file>art/pieces/piece-error.webp</file>
+        <file>art/pieces/piece-lemon-standard.webp</file>
+        <file>art/pieces/piece-strawberry-double.webp</file>
+        <file>art/pieces/piece-strawberry-standard.webp</file>
+        <file>art/key.webp</file>
+        <file>art/level-bar.webp</file>
+        <file>art/level-panel.webp</file>
+        <file>art/mascot-0.webp</file>
+        <file>art/mascot-1.webp</file>
+        <file>art/settings.webp</file>
     </qresource>
 </RCC>

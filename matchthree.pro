@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++20
+CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -10,13 +10,16 @@ CONFIG += c++20
 
 SOURCES += \
 	src/game/gamestate.cpp \
+	src/game/piece.cpp \
 	src/main.cpp \
-	src/ui/mainwindow.cpp
+	src/ui/mainwindow.cpp \
+	src/ui/piecewidget.cpp
 
 HEADERS += \
-	src/game/cell.h \
 	src/game/gamestate.h \
-	src/ui/mainwindow.h
+	src/game/piece.h \
+	src/ui/mainwindow.h \
+	src/ui/piecewidget.h
 
 INCLUDEPATH += src/
 

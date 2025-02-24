@@ -2,7 +2,7 @@
 #define GAMESTATE_H
 
 
-#include <game/cell.h>
+#include <game/piece.h>
 
 #include <array>
 
@@ -16,7 +16,7 @@ public:
 	Gamestate();
 
 private:
-	std::array<std::array<Cell, GAME_BOARD_HEIGHT>, GAME_BOARD_WIDTH> board;
+	std::array<std::array<Piece, GAME_BOARD_HEIGHT>, GAME_BOARD_WIDTH> board;
 };
 
 
