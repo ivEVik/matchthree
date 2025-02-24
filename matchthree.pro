@@ -22,6 +22,8 @@ INCLUDEPATH += src/
 
 RESOURCES += resources/resources.qrc
 
+RC_ICONS = resources/art/icon.ico
+
 # USER CONFIG
 CONFIG(debug, debug|release) {
 	BUILDMODE = debug
@@ -34,7 +36,7 @@ MOC_DIR = ./$${BUILDMODE}-tmp/moc/
 RCC_DIR = ./$${BUILDMODE}-tmp/rcc/
 UI_DIR = ./$${BUILDMODE}-tmp/ui/
 
-# Deployment
+# Windows deployment
 CONFIG(nowindeploy) {
 } else {
 	QMAKE_POST_LINK = windeployqt --no-patchqt --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-compiler-runtime --no-webkit2 --no-angle --no-opengl-sw $${BUILDMODE}

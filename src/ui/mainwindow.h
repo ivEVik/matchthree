@@ -4,16 +4,19 @@
 
 #include <game/gamestate.h>
 
-#include <QMainWindow>
+#include <QWidget>
 
 
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
 	Q_OBJECT
 
 public:
-	MainWindow(Gamestate& gamestate, QWidget *parent = nullptr);
-	//~MainWindow();
+	MainWindow(Gamestate& newGamestate, QWidget* parent = nullptr);
+
+
+protected:
+	void paintEvent(QPaintEvent* event) override;
 
 private:
 	Gamestate& gamestate;

@@ -1,5 +1,6 @@
 <RCC>
-    <qresource>
-        <file>art/icon.png</file>
+    <qresource prefix="/">
+        <file>art/background.webp</file>
+        <file>art/background-header.webp</file>
     </qresource>
 </RCC>
