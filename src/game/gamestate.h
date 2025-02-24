@@ -31,9 +31,16 @@ public:
 	bool willMatch(const int x, const int y, const PieceType type, const BoardDirection noCheckDirection = BoardDirection::NONE) const;
 	bool validMove(const int originX, const int originY, const int targetX, const int targetY) const;
 
+	bool tryMakeMove(const int originX, const int originY, const int targetX, const int targetY);
+
+	bool process();
+
+	int getScore() const;
+
 	static BoardDirection oppositeDir(const BoardDirection direction);
 
 private:
+	int score;
 	std::mt19937 rng;
 
 	std::array<std::array<Piece, BOARD_HEIGHT>, BOARD_WIDTH> board;

@@ -34,6 +34,7 @@ public:
 
 	Piece();
 	Piece(const PieceType type, const PieceValue pointValue);
+	Piece(std::mt19937& rng);
 
 	static PieceType randomType(std::mt19937& rng);
 	static PieceValue randomValue(std::mt19937& rng);
