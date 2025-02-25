@@ -28,7 +28,12 @@ public:
 	static constexpr int BOARD_HEIGHT = 5;
 	static constexpr int MINIMUM_PIECES_FOR_MATCH = 3;
 
+	static_assert(MINIMUM_PIECES_FOR_MATCH > 1, "More than one piece should be needed to form a match.");
+	static_assert(MINIMUM_PIECES_FOR_MATCH <= BOARD_HEIGHT && MINIMUM_PIECES_FOR_MATCH <= BOARD_WIDTH, "The board is too small to allow matches.");
+
 	Gamestate();
+
+	void resetBoard(const bool resetScore = true);
 
 	bool hasValidMoves() const;
 	bool willMatch(const int x, const int y, const PieceType type, const BoardDirection noCheckDirection = BoardDirection::NONE) const;
@@ -49,8 +54,16 @@ private:
 
 	std::array<std::array<Piece, BOARD_HEIGHT>, BOARD_WIDTH> board;
 
-	static_assert(MINIMUM_PIECES_FOR_MATCH > 1, "More than one piece should be needed to form a match.");
-	static_assert(MINIMUM_PIECES_FOR_MATCH <= BOARD_HEIGHT && MINIMUM_PIECES_FOR_MATCH <= BOARD_WIDTH, "The board is too small to allow matches.");
+	void fillBoard();
+	void clearBoard();
+
+signals:
+	void piecesMoved(const size_t originX, const size_t originY, const size_t targetX, const size_t targetY);
+	void pieceMoved(const size_t originX, const size_t originY, const size_t targetX, const size_t targetY);
+	void pieceCreated(const size_t x, const size_t y);
+	void piecesCreated();
+	void pieceDeleted(const size_t x, const size_t y);
+	void pieceMatched(const size_t x, const size_t y);
 };
 
 

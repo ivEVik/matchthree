@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
 
 	Gamestate gamestate = Gamestate();
 	MainWindow window{gamestate};
+	gamestate.resetBoard();
 	window.show();
 
 	return program.exec();

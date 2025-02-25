@@ -1,14 +1,45 @@
 #include "gamestate.h"
 
 #include <cmath>
+#include <QDateTime>
 
 
 Gamestate::Gamestate()
 {
 	score = 0;
-	rng = std::mt19937(std::random_device()());
+	rng = std::mt19937(QDateTime::currentMSecsSinceEpoch());
 	board = std::array<std::array<Piece, BOARD_HEIGHT>, BOARD_WIDTH>();
+}
 
+void Gamestate::resetBoard(const bool resetScore)
+{
+	if(resetScore)
+		score = 0;
+
+	clearBoard();
+	fillBoard();
+
+	for(size_t x = 0; x < BOARD_WIDTH; ++x)
+	{
+		for(size_t y = 0; y < BOARD_HEIGHT; ++y)
+			emit pieceCreated(x, y);
+	}
+}
+
+void Gamestate::clearBoard()
+{
+	for(size_t x = 0; x < BOARD_WIDTH; ++x)
+	{
+		for(size_t y = 0; y < BOARD_HEIGHT; ++y)
+		{
+			board[x][y] = Piece();
+			emit pieceDeleted(x, y);
+		}
+	}
+}
+
+void Gamestate::fillBoard()
+{
 	auto isValid = [this](const int x, const int y, const PieceType type) -> bool
 	{
 		if(x + 1 >= MINIMUM_PIECES_FOR_MATCH)
@@ -120,6 +151,9 @@ bool Gamestate::willMatch(const int x, const int y, const PieceType type, const 
 
 bool Gamestate::validMove(const int originX, const int originY, const int targetX, const int targetY) const
 {
+	if(originX == targetX && originY == targetY)
+		return false;
+
 	if(originX < 0 || originX >= BOARD_WIDTH || originY < 0 || originY >= BOARD_HEIGHT)
 		return false;
 
@@ -176,6 +210,8 @@ bool Gamestate::tryMakeMove(const int originX, const int originY, const int targ
 	board[originX][originY] = board[targetX][targetY];
 	board[targetX][targetY] = piece;
 
+	emit piecesMoved(originX, originY, targetX, targetY);
+
 	return true;
 }
 
@@ -183,13 +219,13 @@ bool Gamestate::process()
 {
 	std::vector<std::array<size_t, 2>> piecesToDelete = std::vector<std::array<size_t, 2>>();
 
-	bool matchesFound = false;
+	bool processSuccessful = false;
 	auto prevPieces = std::array<std::array<size_t, 2>, MINIMUM_PIECES_FOR_MATCH>();
 	size_t prevPieceIndex = 0;
 	PieceType prevType = PieceType::NONE;
 	int matchCount = 0;
 
-	const auto findMatch = [this, &matchesFound, &piecesToDelete, &prevPieces, &prevPieceIndex, &prevType, &matchCount](const size_t x, const size_t y) -> void
+	const auto findMatch = [this, &processSuccessful, &piecesToDelete, &prevPieces, &prevPieceIndex, &prevType, &matchCount](const size_t x, const size_t y) -> void
 	{
 		if(prevType != board[x][y].type)
 			matchCount = 0;
@@ -205,7 +241,7 @@ bool Gamestate::process()
 
 		if(matchCount == MINIMUM_PIECES_FOR_MATCH)
 		{
-			matchesFound = true;
+			processSuccessful = true;
 			for(size_t t = 0; t < MINIMUM_PIECES_FOR_MATCH; ++t)
 				piecesToDelete.push_back(prevPieces[t]);
 		}
@@ -215,22 +251,28 @@ bool Gamestate::process()
 
 	for(size_t x = 0; x < BOARD_WIDTH; ++x)
 	{
+		prevType = PieceType::NONE;
+		matchCount = 0;
 		for(size_t y = 0; y < BOARD_HEIGHT; ++y)
 			findMatch(x, y);
 	}
 
-	prevType = PieceType::NONE;
-	matchCount = 0;
 
 	for(size_t y = 0; y < BOARD_HEIGHT; ++y)
 	{
+		prevType = PieceType::NONE;
+		matchCount = 0;
 		for(size_t x = 0; x < BOARD_WIDTH; ++x)
 			findMatch(x, y);
 	}
 
 	for(const std::array<size_t, 2>& coords : piecesToDelete)
 	{
+		if(board[coords[0]][coords[1]].type == PieceType::NONE)
+			continue;
+
 		score += static_cast<int>(board[coords[0]][coords[1]].pointValue);
+		emit pieceMatched(coords[0], coords[1]);
 		board[coords[0]][coords[1]] = Piece();
 	}
 
@@ -246,19 +288,24 @@ bool Gamestate::process()
 				continue;
 			}
 
-			if(!moveDown)
+			if(moveDown == 0)
 				continue;
 
 			board[x][y - moveDown] = board[x][y];
-			//board[x][y] = Piece();
+			emit pieceMoved(x, y, x, y - moveDown);
 		}
 
 		for(size_t y = BOARD_HEIGHT - moveDown; y < BOARD_HEIGHT; ++y)
+		{
 			board[x][y] = Piece(rng);
+			emit pieceCreated(x, y);
+		}
 	}
 
+	if(processSuccessful)
+		emit piecesCreated();
 
-	return matchesFound;
+	return processSuccessful;
 }
 
 int Gamestate::getScore() const { return score; }
