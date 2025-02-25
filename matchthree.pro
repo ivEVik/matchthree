@@ -42,7 +42,7 @@ UI_DIR = ./$${BUILDMODE}-tmp/ui/
 # Windows deployment
 CONFIG(nowindeploy) {
 } else {
-	QMAKE_POST_LINK = windeployqt --no-patchqt --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-compiler-runtime --no-webkit2 --no-angle --no-opengl-sw $${BUILDMODE}
+	QMAKE_POST_LINK = windeployqt --no-patchqt --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-webkit2 --no-angle --no-opengl-sw $${BUILDMODE}
 }
 
 # Default rules for deployment.

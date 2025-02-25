@@ -67,8 +67,6 @@ MainWindow::MainWindow(Gamestate& newGamestate, QWidget* parent) : QWidget(paren
 	connect(&gamestate, SIGNAL(pieceMatched(const size_t, const size_t)), this, SLOT(slotPieceMatched(const size_t, const size_t)));
 	connect(&gamestate, SIGNAL(piecesMoved(const size_t, const size_t, const size_t, const size_t)), this, SLOT(slotMovePieces(const size_t, const size_t, const size_t, const size_t)));
 	connect(&gamestate, SIGNAL(pieceMoved(const size_t, const size_t, const size_t, const size_t)), this, SLOT(slotMovePiece(const size_t, const size_t, const size_t, const size_t)));
-
-	handleAnchors();
 }
 
 void MainWindow::movePiece(PieceWidget* piece, const size_t x, const size_t y)
