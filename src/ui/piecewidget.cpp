@@ -26,7 +26,6 @@ PieceWidget::PieceWidget(const Piece* const piece, QWidget* parent) : QPushButto
 	pieceActiveOverlay = QImage(getImageFilePath(piece, PIECE_FILE_SUFFIX_ACTIVE).c_str());
 
 	isHovered = false;
-	matched = false;
 
 	setMinimumWidth(WIDTH);
 	setMaximumWidth(WIDTH);

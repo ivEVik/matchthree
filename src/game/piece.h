@@ -12,17 +12,18 @@ enum class PieceType : int
 	STRAWBERRY = 2,
 	LEMON = 3,
 
-	RANDOM_MIN = AVOCADO,
-	RANDOM_MAX = LEMON
+	RANDOM_MIN = AVOCADO, // Наименьший по значению тип фишки, который можно получить при случайной генерации.
+	RANDOM_MAX = LEMON // Наибольший по значению тип фишки, который можно получить при случайной генерации.
 };
 
+// Количество очков за нахождение фишки в комбинации.
 enum class PieceValue : int
 {
 	NONE = 0,
 	STANDARD = 1,
 	DOUBLE = STANDARD * 2,
 
-	DOUBLE_CHANCE_ONE_IN = 3
+	DOUBLE_CHANCE_ONE_IN = 3 // DOUBLE будет появляться один в DOUBLE_CHANCE_ONE_IN раз.
 };
 
 

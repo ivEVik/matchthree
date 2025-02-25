@@ -310,7 +310,7 @@ bool Gamestate::process()
 
 int Gamestate::getScore() const { return score; }
 
-const Piece* Gamestate::getPiece(const size_t x, const size_t y) const
+const Piece* Gamestate::getPiece(const size_t x, const size_t y)const
 {
 	if(x >= BOARD_WIDTH || y >= BOARD_HEIGHT)
 		return nullptr;
