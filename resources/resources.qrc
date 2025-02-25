@@ -27,5 +27,6 @@
         <file>art/pieces/piece-strawberry-double-hover.webp</file>
         <file>art/pieces/piece-strawberry-standard-active.webp</file>
         <file>art/pieces/piece-strawberry-standard-hover.webp</file>
+        <file>art/status.webp</file>
     </qresource>
 </RCC>

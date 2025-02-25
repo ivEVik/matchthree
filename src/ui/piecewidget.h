@@ -5,8 +5,6 @@
 #include <game/gamestate.h>
 #include <game/piece.h>
 
-#include <map>
-//#include <QWidget>
 #include <QPushButton>
 #include <string>
 

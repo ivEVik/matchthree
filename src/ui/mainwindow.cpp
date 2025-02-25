@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 
 #include <QPainter>
-//#include <QGraphicsAnchorLayout>
 #include <QPushButton>
 #include <QTimer>
 
@@ -18,7 +17,44 @@ MainWindow::MainWindow(Gamestate& newGamestate, QWidget* parent) : QWidget(paren
 
 	resize(MINIMUM_WIDTH, MINIMUM_HEIGHT);
 
-	gameBoard = new QWidget(this);
+	//Дочерний объект будет подчищен qt.
+	QLabel* decal = new QLabel(this);
+	decal->setPixmap(QPixmap(":/art/settings.webp"));
+	windowDecals.push_back(std::make_tuple(decal, Anchor::BOTTOM | Anchor::LEFT, 30, -20));
+
+	//Дочерний объект будет подчищен qt.
+	decal = new QLabel(this);
+	decal->setPixmap(QPixmap(":/art/key.webp"));
+	windowDecals.push_back(std::make_tuple(decal, Anchor::BOTTOM | Anchor::RIGHT, -30, -20));
+
+	//Дочерний объект будет подчищен qt.
+	decal = new QLabel(this);
+	decal->setPixmap(QPixmap(":/art/status.webp"));
+	windowDecals.push_back(std::make_tuple(decal, Anchor::TOP | Anchor::CENTRE_H, 0, 0));
+
+	//Дочерний объект будет подчищен qt.
+	decal = new QLabel(this);
+	decal->setPixmap(QPixmap(":/art/level-bar.webp"));
+	windowDecals.push_back(std::make_tuple(decal, Anchor::TOP | Anchor::CENTRE_H, 0, 48));
+
+	//Дочерний объект будет подчищен qt.
+	boardHolder = new QWidget(this);
+	decal = new QLabel(boardHolder);
+	decal->setPixmap(QPixmap(":/art/mascot-0.webp"));
+	boardDecals.push_back(std::make_tuple(decal, Anchor::TOP | Anchor::LEFT));
+
+	//Дочерний объект будет подчищен qt.
+	decal = new QLabel(boardHolder);
+	decal->setPixmap(QPixmap(":/art/mascot-1.webp"));
+	boardDecals.push_back(std::make_tuple(decal, Anchor::TOP | Anchor::RIGHT));
+
+	//Дочерний объект будет подчищен qt.
+	decal = new QLabel(this);
+	decal->setPixmap(QPixmap(":/art/level-panel.webp"));
+	windowDecals.push_back(std::make_tuple(decal, Anchor::TOP | Anchor::CENTRE_H, 0, 96));
+
+	//Дочерний объект будет подчищен qt.
+	gameBoard = new QWidget(boardHolder);
 	gameBoard->setMinimumWidth(BOARD_WIDTH);
 	gameBoard->setMaximumWidth(BOARD_WIDTH);
 	gameBoard->setMinimumHeight(BOARD_HEIGHT);
@@ -31,23 +67,8 @@ MainWindow::MainWindow(Gamestate& newGamestate, QWidget* parent) : QWidget(paren
 	connect(&gamestate, SIGNAL(pieceMatched(const size_t, const size_t)), this, SLOT(slotPieceMatched(const size_t, const size_t)));
 	connect(&gamestate, SIGNAL(piecesMoved(const size_t, const size_t, const size_t, const size_t)), this, SLOT(slotMovePieces(const size_t, const size_t, const size_t, const size_t)));
 	connect(&gamestate, SIGNAL(pieceMoved(const size_t, const size_t, const size_t, const size_t)), this, SLOT(slotMovePiece(const size_t, const size_t, const size_t, const size_t)));
-}
 
-void MainWindow::paintEvent(QPaintEvent* event)
-{
-	QRect rectToPaint = rect();
-
-	QPainter painter(this);
-	painter.setPen(Qt::NoPen);
-	painter.setBrush(QBrush(QImage(":/art/background.webp")));
-	painter.drawRect(rectToPaint);
-
-	QImage bgHeader = QImage(":/art/background-header.webp");
-	rectToPaint.setHeight(bgHeader.height());
-	painter.setBrush(QBrush(bgHeader));
-	painter.drawRect(rectToPaint);
-
-	QWidget::paintEvent(event);
+	handleAnchors();
 }
 
 void MainWindow::movePiece(PieceWidget* piece, const size_t x, const size_t y)
@@ -152,4 +173,55 @@ void MainWindow::slotWaitForAnimations()
 {
 	allowBoardInteraction = false;
 	QTimer::singleShot(busyFor, this, SLOT(slotProcessGamestate()));
+}
+
+void MainWindow::paintEvent(QPaintEvent* event)
+{
+	QRect rectToPaint = rect();
+
+	QPainter painter(this);
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(QBrush(QImage(":/art/background.webp")));
+	painter.drawRect(rectToPaint);
+
+	QImage bgHeader = QImage(":/art/background-header.webp");
+	rectToPaint.setHeight(bgHeader.height());
+	painter.setBrush(QBrush(bgHeader));
+	painter.drawRect(rectToPaint);
+
+	QWidget::paintEvent(event);
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+	handleAnchors();
+
+	QWidget::resizeEvent(event);
+}
+
+void MainWindow::handleAnchors()
+{
+	boardHolder->setGeometry((rect().width() - BOARD_WIDTH) / 2, 0, BOARD_WIDTH, rect().height());
+	gameBoard->setGeometry(0, (rect().height() - BOARD_HEIGHT / 1.2) / 2, BOARD_WIDTH, BOARD_HEIGHT);
+
+	for(const auto& [decal, anchor] : boardDecals)
+		applyAnchor(decal, anchor, 0, (rect().height() - BOARD_HEIGHT / 1.2) / 2 - decal->rect().height() / 1.5);
+
+	for(const auto& [decal, anchor, x, y] : windowDecals)
+		applyAnchor(decal, anchor, x, y);
+}
+
+void MainWindow::applyAnchor(QWidget* const widget, const Anchor anchor, int x, int y)
+{
+	if((anchor & Anchor::BOTTOM) != Anchor::NONE)
+		y += widget->parentWidget()->rect().height() - widget->rect().height();
+	else if((anchor & Anchor::CENTRE_V) != Anchor::NONE)
+		y += (widget->parentWidget()->rect().height() - widget->rect().height()) / 2;
+
+	if((anchor & Anchor::RIGHT) != Anchor::NONE)
+		x += widget->parentWidget()->rect().width() - widget->rect().width();
+	else if((anchor & Anchor::CENTRE_H) != Anchor::NONE)
+		x += (widget->parentWidget()->rect().width() - widget->rect().width()) / 2;
+
+	widget->move(x, y);
 }

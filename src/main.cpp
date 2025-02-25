@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
 	MainWindow window{gamestate};
 	gamestate.resetBoard();
 	window.show();
+	window.handleAnchors();
 
 	return program.exec();
 }

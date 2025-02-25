@@ -53,6 +53,7 @@ void PieceWidget::moveOnBoard(int& busyFor, int x, int y)
 	int duration = (std::abs(x - pos().x()) + std::abs(y - pos().y())) / SPEED;
 	busyFor = busyFor < duration ? duration : busyFor;
 
+	//Дочерний объект будет подчищен qt.
 	QPropertyAnimation* anim = new QPropertyAnimation(this, "pos", this);
 	anim->setDuration(duration);
 	anim->setStartValue(pos());
@@ -70,9 +71,11 @@ void PieceWidget::instantMoveOnBoard(const size_t x, const size_t y)
 
 void PieceWidget::match()
 {
+	//Дочерний объект будет подчищен qt.
 	QGraphicsOpacityEffect* opacity = new QGraphicsOpacityEffect(this);
 	setGraphicsEffect(opacity);
 
+	//Дочерний объект будет подчищен qt.
 	QPropertyAnimation* anim = new QPropertyAnimation(opacity, "opacity", opacity);
 	anim->setDuration(350);
 	anim->setStartValue(1);
