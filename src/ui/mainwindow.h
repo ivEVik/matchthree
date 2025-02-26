@@ -3,23 +3,13 @@
 
 
 #include <game/gamestate.h>
+#include <ui/anchor.h>
 #include <ui/piecewidget.h>
 
 #include <array>
 #include <QLabel>
 #include <QWidget>
 
-
-enum class Anchor
-{
-	NONE = 0,
-	TOP = 1 << 0,
-	BOTTOM = 1 << 1,
-	LEFT = 1 << 2,
-	RIGHT = 1 << 3,
-	CENTRE_H = 1 << 4,
-	CENTRE_V = 1 << 5
-};
 
 // Класс основного окна.
 class MainWindow final : public QWidget
@@ -90,16 +80,6 @@ private slots:
 
 	void slotWaitForAnimations();
 };
-
-inline Anchor operator|(Anchor a, Anchor b)
-{
-	return static_cast<Anchor>(static_cast<int>(a) | static_cast<int>(b));
-}
-
-inline Anchor operator&(Anchor a, Anchor b)
-{
-	return static_cast<Anchor>(static_cast<int>(a) & static_cast<int>(b));
-}
 
 
 #endif // MAINWINDOW_H

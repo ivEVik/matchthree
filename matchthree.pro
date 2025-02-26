@@ -13,12 +13,14 @@ SOURCES += \
 	src/game/gamestate.cpp \
 	src/game/piece.cpp \
 	src/main.cpp \
+	src/ui/anchor.cpp \
 	src/ui/mainwindow.cpp \
 	src/ui/piecewidget.cpp
 
 HEADERS += \
 	src/game/gamestate.h \
 	src/game/piece.h \
+	src/ui/anchor.h \
 	src/ui/mainwindow.h \
 	src/ui/piecewidget.h
 
